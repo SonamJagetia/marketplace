@@ -3,7 +3,7 @@
 		<div class="row">
 			<div class="hero-heading">
 				Service for lean entrepreneur <br/>
-				Find it on Threely.
+				Find it on ProtovoMarketplace.
 				<p>Browse. Buy. Done. </p>
 			</div>
 		</div>
@@ -54,18 +54,18 @@
 				</h3>
 			</div>
 		</div>
+		{{#each gigs}}
 		<div class="col-md-3">
 			<div class="gig-card">
-
-				<img src="/img/lyrics.jpg" />
+				<a href="/service_detail/{{ _id}}"><img src="/img/lyrics.jpg" /></a>
 				<h4>
-					I will create a song for your lyrics
+					{{ title }}
 				</h4>
 				<h3>
-					$3
+					${{ price }}
 				</h3>
 			</div>
 		</div>
-
+		{{/each}}
 	</div>
 </div>
