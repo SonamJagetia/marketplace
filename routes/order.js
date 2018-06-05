@@ -23,7 +23,7 @@ const fee = 3.15;
     var price = req.session.price;
     price *= 100;
     stripe.customers.create({
-      email: req.user.email
+      email: req.body.email
     }).then(function(customer){
       return stripe.customers.createSource(customer.id, {
         source: req.body.stripeToken
