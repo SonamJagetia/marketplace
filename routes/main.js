@@ -3,12 +3,30 @@ const async = require('async');
 const Gig = require('../models/gig');
 const User = require('../models/user');
 const Promocode = require('../models/promocode');
+const algoliasearch = require('algoliasearch');
 
+var client = algoliasearch('57FUNDOU3R', 'dae84ebde938e4a90d4291076aa77029');
+var index = client.initIndex('GigSchema');
 router.get('/', (req, res, next) => {
   Gig.find({}, function(err, gigs) {
     res.render('main/home', { gigs: gigs });
   })
 });
+
+router.route('/search')
+  .get((req, res, next) => {
+    if (req.query.q) {
+      index.search(req.query.q, function(err, content) {
+        console.log(content);
+        res.render('main/search_results', { content: content, search_result: req.query.q });
+
+      });
+    }
+  })
+  .post((req, res, next) => {
+    res.redirect('/search/?q=' + req.body.search_input);
+  })
+
 
 
 router.get('/my-gigs', (req, res, next) => {

@@ -93,4 +93,18 @@ router.get('/users/:id/orders', (req, res, next) => {
     });
 });
 
+router.post('/add-to-cart', (req, res, next) => {
+  const gigId = req.body.gig_id;
+  User.update(
+    {
+      _id: req.user._id
+    },
+    {
+      $push: { cart: gigId }
+    }, function(err, count) {
+      res.json("Added to cart");
+    }
+  );
+});
+
 module.exports = router;
