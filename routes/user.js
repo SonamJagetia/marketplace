@@ -48,6 +48,13 @@ router.route('/login')
     failureFlash : true // allow flash messages
   }));
 
+router.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
+
+router.get('/auth/facebook/callback', passport.authenticate('facebook', {
+  successRedirect: '/profile', 
+  failureRedirect: '/login',
+  failureFlash: true
+ }));
 /* PROFILE ROUTE */
 router.get('/profile', passportConfig.isAuthenticated, (req, res, next) => {
   res.render('accounts/profile');

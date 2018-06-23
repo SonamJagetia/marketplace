@@ -1,6 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-
+const FacebookStrategy = require('passport-facebook').Strategy;
 const config = require('./secret');
 const User = require('../models/user');
 
@@ -41,6 +41,29 @@ passport.use('local-login', new LocalStrategy({
     return done(null, user);
   });
 
+}));
+
+passport.use(new FacebookStrategy({
+  clientID: '404508046718998',
+  clientSecret: '4813990781cf058c3830de125e7b6e3f',
+  callbackURL: 'http://localhost:3000/auth/facebook/callback',
+  profileFields: ['id', 'displayName', 'email']
+}, function(accessToken, refreshToken, profile, next) {
+    User.findOne({ facebookId: profile.id }, function(err, user) {
+      if (user) {
+        return next(err, user);
+      } else {
+        var newUser = new User();
+        newUser.email = profile._json.email;
+        newUser.facebookId = profile.id;
+        newUser.name = profile.displayName;
+        newUser.photo = 'https://graph.facebook.com/' + profile.id + '/picture?type=large';
+        newUser.save(function(err){
+          if (err) throw err;
+          next(err, newUser);
+        });
+      }
+    });
 }));
 
 
