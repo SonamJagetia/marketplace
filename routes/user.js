@@ -51,10 +51,18 @@ router.route('/login')
 router.get('/auth/facebook', passport.authenticate('facebook', { scope: 'email' }));
 
 router.get('/auth/facebook/callback', passport.authenticate('facebook', {
-  successRedirect: '/profile', 
+  successRedirect: '/profile',
   failureRedirect: '/login',
   failureFlash: true
  }));
+
+ router.get('/auth/google', passport.authenticate('google', { scope: 'email' }));
+
+ router.get('/auth/google/callback', passport.authenticate('google', {
+   successRedirect: '/profile',
+   failureRedirect: '/login',
+   failureFlash: true
+  }));
 /* PROFILE ROUTE */
 router.get('/profile', passportConfig.isAuthenticated, (req, res, next) => {
   res.render('accounts/profile');

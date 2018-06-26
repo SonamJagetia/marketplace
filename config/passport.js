@@ -1,6 +1,7 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const config = require('./secret');
 const User = require('../models/user');
 
@@ -58,6 +59,28 @@ passport.use(new FacebookStrategy({
         newUser.facebookId = profile.id;
         newUser.name = profile.displayName;
         newUser.photo = 'https://graph.facebook.com/' + profile.id + '/picture?type=large';
+        newUser.save(function(err){
+          if (err) throw err;
+          next(err, newUser);
+        });
+      }
+    });
+}));
+
+passport.use(new GoogleStrategy({
+  clientID: '867423617280-7lug1tin2ee4lclkce6ur6qqft057bkv.apps.googleusercontent.com',
+  clientSecret: 'l_mLUbS5ExE41KE8rT1UZEie',
+  callbackURL: 'https://psmarketplace.herokuapp.com/auth/google/callback',
+}, function(accessToken, refreshToken, profile, next) {
+    User.findOne({ googleId: profile.id }, function(err, user) {
+      if (user) {
+        return next(err, user);
+      } else {
+        var newUser = new User();
+        newUser.email = profile.emails[0].value;
+        newUser.googleId = profile.id;
+        newUser.name = profile.displayName;
+        newUser.photo = profile._json.image.url;
         newUser.save(function(err){
           if (err) throw err;
           next(err, newUser);
