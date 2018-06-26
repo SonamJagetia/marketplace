@@ -46,7 +46,7 @@ passport.use('local-login', new LocalStrategy({
 passport.use(new FacebookStrategy({
   clientID: '404508046718998',
   clientSecret: '4813990781cf058c3830de125e7b6e3f',
-  callbackURL: 'http://localhost:3000/auth/facebook/callback',
+  callbackURL: 'https://psmarketplace.herokuapp.com/auth/facebook/callback',
   profileFields: ['id', 'displayName', 'email']
 }, function(accessToken, refreshToken, profile, next) {
     User.findOne({ facebookId: profile.id }, function(err, user) {
